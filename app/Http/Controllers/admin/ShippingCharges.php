@@ -7,8 +7,8 @@ use Illuminate\Http\Request;
 
 class ShippingCharges extends Controller
 {
-    public function create(){
+    public function create(Request $request){
         // $countries =
-        
+        dd($request->all());;
     }
 }
