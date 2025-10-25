@@ -9,6 +9,7 @@ class ShippingCharges extends Controller
 {
     public function create(Request $request){
         // $countries =
-        dd($request->all());;
+        dd($request->all());
+        dd($request->all());
     }
 }
