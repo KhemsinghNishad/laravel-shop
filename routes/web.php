@@ -13,6 +13,8 @@ use App\Http\Controllers\front\AuthController;
 use App\Http\Controllers\front\CartController;
 use App\Http\Controllers\front\HomeController as FrontHomeController;
 use App\Http\Controllers\front\ShopController;
+use App\Http\Controllers\GetContriesController;
+use App\Http\Controllers\ShippingChargeController;
 use App\Http\Middleware\AdminAuthenticate;
 use App\Http\Middleware\AdminRedirect;
 use App\Http\Middleware\UserAuthenticate;
@@ -140,4 +142,9 @@ Route::prefix('/admin')->middleware('auth:admin')->group(function () {
 
     Route::post('/product-image/update', [ProductImageController::class, 'update'])->name('product.image.update');
     Route::delete('/product-image', [ProductImageController::class, 'destroy'])->name('product.image.delete');
+
+
+    Route::get('/get-countries', [GetContriesController::class, 'index'])->name('getcountries');
+    Route::get('/shipping-charge/create', [ShippingChargeController::class, 'create'])->name('shipping.charge.create');
+    Route::post('/shipping-charge/store', [ShippingChargeController::class, 'store'])->name('shipping.store');
 });
