@@ -26,8 +26,8 @@ RUN chown -R www-data:www-data /var/www/html \
     && chmod -R 755 /var/www/html/storage \
     && chmod -R 755 /var/www/html/bootstrap/cache
 
-# Expose PHP-FPM port
-EXPOSE 9000
+# Expose Render’s HTTP port
+EXPOSE 10000
 
-# Start PHP-FPM server
-CMD ["php-fpm"]
+# Start Laravel built-in server
+CMD php artisan serve --host=0.0.0.0 --port=10000
