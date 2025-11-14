@@ -147,4 +147,12 @@ Route::prefix('/admin')->middleware('auth:admin')->group(function () {
     Route::get('/get-countries', [GetContriesController::class, 'index'])->name('getcountries');
     Route::get('/shipping-charge/create', [ShippingChargeController::class, 'create'])->name('shipping.charge.create');
     Route::post('/shipping-charge/store', [ShippingChargeController::class, 'store'])->name('shipping.store');
+
+    Route::prefix('/discount-codes')->group(function () {
+        Route::get('/', [App\Http\Controllers\admin\DiscountCodeController::class, 'index'])->name('discount-codes.index');
+        Route::get('/create', [App\Http\Controllers\admin\DiscountCodeController::class, 'create'])->name('discount-codes.create');
+        Route::post('/store', [App\Http\Controllers\admin\DiscountCodeController::class, 'store'])->name('discount-codes.store');
+        Route::get('/{id}/edit', [App\Http\Controllers\admin\DiscountCodeController::class, 'edit'])->name('discount-codes.edit');
+        Route::put('/{id}', [App\Http\Controllers\admin\DiscountCodeController::class, 'update'])->name('discount-codes.update');
+    });
 });
