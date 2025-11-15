@@ -152,7 +152,8 @@ Route::prefix('/admin')->middleware('auth:admin')->group(function () {
         Route::get('/', [App\Http\Controllers\admin\DiscountCodeController::class, 'index'])->name('discount-codes.index');
         Route::get('/create', [App\Http\Controllers\admin\DiscountCodeController::class, 'create'])->name('discount-codes.create');
         Route::post('/store', [App\Http\Controllers\admin\DiscountCodeController::class, 'store'])->name('discount-codes.store');
-        Route::get('/{id}/edit', [App\Http\Controllers\admin\DiscountCodeController::class, 'edit'])->name('discount-codes.edit');
+        Route::get('/edit/{id}', [App\Http\Controllers\admin\DiscountCodeController::class, 'edit'])->name('discount-codes.edit');
         Route::put('/{id}', [App\Http\Controllers\admin\DiscountCodeController::class, 'update'])->name('discount-codes.update');
+        Route::delete('/destroy/{id}', [App\Http\Controllers\admin\DiscountCodeController::class, 'destroy'])->name('discount-codes.destroy');
     });
 });

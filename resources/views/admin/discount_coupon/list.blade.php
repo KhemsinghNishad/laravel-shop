@@ -6,10 +6,10 @@
             <div class="container-fluid my-2">
                 <div class="row mb-2">
                     <div class="col-sm-6">
-                        <h1>Categories</h1>
+                        <h1>Discount Coupons</h1>
                     </div>
                     <div class="col-sm-6 text-right">
-                        <a href="{{ route('discount-codes.create') }}" class="btn btn-primary">New Category</a>
+                        <a href="{{ route('discount-codes.create') }}" class="btn btn-primary">New Discount Coupons</a>
                     </div>
                 </div>
             </div>
@@ -99,7 +99,7 @@
                                                 @endif
                                             </td>
                                             <td>
-                                                <a href="">
+                                                <a href="{{ route('discount-codes.edit', $discount_coupon->id) }}">
                                                     <svg class="filament-link-icon w-4 h-4 mr-1"
                                                         xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
                                                         fill="currentColor" aria-hidden="true">
@@ -108,7 +108,7 @@
                                                         </path>
                                                     </svg>
                                                 </a>
-                                                <a href="#" class="text-danger w-4 h-4 mr-1">
+                                                <a href="javascript:void(0)" onclick="deleteDiscountCoupon({{ $discount_coupon->id }})" class="text-danger w-4 h-4 mr-1" >
                                                     <svg wire:loading.remove.delay="" wire:target=""
                                                         class="filament-link-icon w-4 h-4 mr-1"
                                                         xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
@@ -124,7 +124,7 @@
                                     @endforeach
                                 @else
                                     <tr>
-                                        <td colspan="5">No Records Found</td>
+                                        <td colspan="8">No Records Found</td>
                                     </tr>
                                 @endif
 
@@ -165,8 +165,8 @@
     @endif --}}
 
     <script>
-        function deleteCategory(id) {
-            var url = '{{ route('categories.destroy', 'id') }}';
+        function deleteDiscountCoupon(id) {            
+            var url = '{{ route('discount-codes.destroy', 'id') }}';
             var newUrl = url.replace('id', id);
             // alert(newUrl);
             // return false;
