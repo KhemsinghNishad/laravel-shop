@@ -43,6 +43,8 @@ Route::post('/front/delete-cart', [CartController::class, 'deleteCart'])->name('
 Route::get('/front/checkout-cart', [CartController::class, 'checkout'])->name('checkout.cart');
 Route::post('/front/checkout-process', [CartController::class, 'checkoutProcess'])->name('checkout.process');
 Route::get('/front/say-hello/{user_name}/{orderId}', [CartController::class, 'hello'])->name('hello');
+Route::post('/front/apply-coupon', [CartController::class, 'applyCoupon'])->name('apply.coupon');
+Route::post('/front/remove.coupon', [CartController::class, 'removeCoupon'])->name('remove.coupon');
 
 
 

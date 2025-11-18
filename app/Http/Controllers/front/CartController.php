@@ -4,9 +4,11 @@ namespace App\Http\Controllers\front;
 
 use App\Http\Controllers\Controller;
 use App\Models\CustomerAddress;
+use App\Models\DiscountCode;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\Product;
+use Carbon\Carbon;
 use Gloudemans\Shoppingcart\Facades\Cart;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -181,19 +183,28 @@ class CartController extends Controller
 
             $order = new Order();
             $order->user_id = $user->id;
+
+            if ($request->session()->has('discountCode')) {
+                $order->coupon_code = $request->session()->get('discountCode');
+                $discount = $request->session()->get('newDiscount');
+                $subtotal = $request->session()->get('newSubtotal');
+                $grandtotal = $subtotal + $shipping;
+            }
             $order->subtotal = $subtotal;
             $order->grand_total = $grandtotal;
-            $order->shipping = $shipping;
             $order->discount = $discount;
+            $order->shipping = $shipping;
+
+
             $order->first_name = $request->first_name;
-            $order->last_name = $request->first_name;
+            $order->last_name = $request->last_name;
             $order->email = $request->email;
             $order->mobile_no = $request->mobile;
             $order->address = $request->address;
             $order->state = $request->state;
             $order->city = $request->city;
             $order->zip = $request->zip;
-            $order->notes = $request->notes;
+            $order->notes = $request->order_notes;
             $order->city = $request->city;
             $order->save();
 
@@ -212,17 +223,139 @@ class CartController extends Controller
 
 
             $request->session()->flash('success', 'you successfully placed your order');
+
+            if ($request->session()->has('discountCode')) {
+                $request->session()->forget('discountCode');
+                $request->session()->forget('newSubtotal');
+                $request->session()->forget('newDiscount');
+            }
             return response()->json([
                 'status' => true,
                 'message' => 'order placed successfully',
                 'order_id' => $order->id,
                 'user_name' => $user->name
             ]);
-        } else {
         }
     }
 
-    public function hello($user_name, $order_id){
-           return view('front.hello', compact('user_name', 'order_id'));
+    public function hello($user_name, $order_id)
+    {
+        return view('front.hello', compact('user_name', 'order_id'));
+    }
+
+    public function applyCoupon(Request $request)
+    {
+        $code = $request->coupon_code;
+
+        // Coupon exists or not
+        $coupon = DiscountCode::where('code', $code)
+            ->where('status', 'Active')
+            ->first();
+
+        if (!$coupon) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Invalid coupon code'
+            ]);
+        }
+        if ($coupon->start_date != '') {
+            $now = Carbon::now();
+            $start_date = Carbon::parse($coupon->start_date);
+            $end_date = Carbon::parse($coupon->end_date);
+
+            // 1️⃣ not started yet
+            if ($now->lt($start_date)) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'This coupon code is not yet valid.1'
+                ]);
+            }
+
+            // 2️⃣ expired
+            if ($now->gt($end_date)) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'This coupon code has expired.2'
+                ]);
+            }
+        }
+
+        if ($coupon->most_use > 0) {
+            $couponUsed = Order::where('coupon_code', $code)->count();
+
+
+            if ($couponUsed >= $coupon->most_use) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'This coupon is not valid, try next time.'
+                ]);
+            }
+        }
+
+        if ($coupon->max_user > 0) {
+            $couponUsedByUser = Order::where('coupon_code', $code)
+                ->where('user_id', Auth::id())
+                ->count();
+            if ($couponUsedByUser >= $coupon->max_user) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'You have already used this coupon code maximum times allowed for a user.'
+                ]);
+            }
+        }
+
+
+        // 3️⃣ SUCCESS
+
+        $subtotalString  = Cart::subtotal();
+        $subtotal = floatval(str_replace(',', '', $subtotalString));
+
+        if($subtotal < $coupon->minimum_amount){
+            return response()->json([
+                'status' => false,
+                'message' => 'Your order amount is less than the minimum order amount for this coupon.'
+            ]);
+        }
+        if ($coupon->type == 'percent') {
+            $newDiscount = ($subtotal * $coupon->discount_amount) / 100;
+            $newSubtotal = $subtotal - $newDiscount;
+        }
+        if ($coupon->type == 'fixed') {
+            $newDiscount = $coupon->discount_amount;
+            $newSubtotal = $subtotal - $coupon->discount_amount;
+        }
+        if ($newSubtotal < 0) {
+            return response()->json([
+                'status' => false,
+                'message' => 'This coupon code is not valid for this product'
+            ]);
+        }
+
+        $request->session()->put('discountCode', $coupon->code);
+        $request->session()->put('newSubtotal', $newSubtotal);
+        $request->session()->put('newDiscount', $newDiscount);
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Coupon applied successfully!',
+            'newSubtotal' => $newSubtotal,
+            'coupon_code' => $coupon
+        ]);
+    }
+
+    public function removeCoupon(Request $request)
+    {
+        if ($request->session()->has('discountCode')) {     
+            $request->session()->forget('discountCode');
+            $request->session()->forget('newSubtotal');
+            $request->session()->forget('newDiscount');
+        }
+
+        $subtotal = floatval(str_replace(',', '', Cart::subtotal()));
+        return response()->json([
+            'status' => true,
+            'subtotal' => $subtotal,
+            'message' => 'Coupon removed successfully!'
+        ]);
     }
 }
