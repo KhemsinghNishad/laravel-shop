@@ -3,6 +3,9 @@
 namespace App\Http\Controllers\front;
 
 use App\Http\Controllers\Controller;
+use App\Models\Order;
+use App\Models\OrderItem;
+use App\Models\Product;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -79,4 +82,31 @@ class AuthController extends Controller
         Auth::logout();
         return redirect()->route('user.login')->with('success', 'user logged out successfully');
     }
+
+    public function orders()
+    {
+        $orderDetails = Order::orderBy('id', 'desc')->where('user_id', Auth::id())->get();
+        $data['orderDetails'] = $orderDetails;
+        return view('front.orders', $data);
+    }
+
+    public function orderDetail(Request $request, $id)
+    {
+        $orderDetails = Order::where('id', $id)->where('user_id', Auth::id())->first();
+        if (!$orderDetails) {
+            return redirect()->route('user.orders')->with('error', 'Order not found');
+        }
+        $orderItemDetail = OrderItem::where('order_id', $id)->get();
+        if (!$orderItemDetail) {
+            return redirect()->route('user.orders')->with('error', 'Order not found');
+        }
+
+
+        return view('front.order-detail',  [
+            'orderItemDetail' => $orderItemDetail,
+            'orderDetails' => $orderDetails,
+        ]);
+    }
+
+    
 }

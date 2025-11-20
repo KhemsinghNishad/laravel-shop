@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Category;
+use App\Models\Product_Image;
 use Illuminate\Support\Facades\Http;
 
 function getCategories()
@@ -16,6 +17,10 @@ function getCategories()
         ->where('status', 1)
         ->where('showHome', 'Yes')
         ->get();
+}
+
+function getProductImage($id){
+    return Product_Image::where('product_id', $id)->first();
 }
 
 // function getCountries()

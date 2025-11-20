@@ -179,7 +179,7 @@
                                                     ✕
                                                 </button>
                                             </div>
-                        @endif                                            
+                        @endif
                         <div class="card payment-form ">
                             <h3 class="card-title h5 mb-3">Payment Method</h3>
                             <div>
@@ -283,11 +283,8 @@
                         var user_name = response.user_name;
                         var order_id = response.order_id;
 
-                        var url = "{{ route('hello', [':user_name', ':orderId']) }}"
-                            .replace(':user_name', user_name)
-                            .replace(':orderId', order_id);
 
-                        window.location.href = url;
+                        window.location.href = "{{ route('user.orders') }}";
                     }
                     if (response.status == false) {
                         if (error.first_name) {

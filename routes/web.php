@@ -5,6 +5,7 @@ use App\Http\Controllers\admin\BrandsController;
 use App\Http\Controllers\admin\CategoriesController;
 use App\Http\Controllers\admin\HomeController;
 use App\Http\Controllers\admin\ImageUploadController;
+use App\Http\Controllers\admin\OrderController;
 use App\Http\Controllers\admin\ProductController;
 use App\Http\Controllers\admin\ProductImageController;
 use App\Http\Controllers\admin\ProductSubCategoryController;
@@ -61,6 +62,8 @@ Route::prefix('/account')->group(function () {
     // Route::middleware('auth')->group(function () {
     Route::middleware(UserAuthenticate::class)->group(function () {
         Route::get('/user/account', [AuthController::class, 'account'])->name('user.account');
+        Route::get('/user/orders', [AuthController::class, 'orders'])->name('user.orders');
+        Route::get('/user/order-details/{id}', [AuthController::class, 'orderDetail'])->name('user.order.detail');
         Route::get('/user/logout', [AuthController::class, 'logout'])->name('user.logout');
     });
 
@@ -158,4 +161,11 @@ Route::prefix('/admin')->middleware('auth:admin')->group(function () {
         Route::put('/{id}', [App\Http\Controllers\admin\DiscountCodeController::class, 'update'])->name('discount-codes.update');
         Route::delete('/destroy/{id}', [App\Http\Controllers\admin\DiscountCodeController::class, 'destroy'])->name('discount-codes.destroy');
     });
+
+    Route::prefix('/orders')->group(function () {
+        Route::get('/', [OrderController::class, 'index'])->name('admin.orders.index');
+        Route::get('/{id}', [OrderController::class, 'show'])->name('admin.orders.show');
+
+
+});
 });
