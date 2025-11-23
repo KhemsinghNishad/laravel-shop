@@ -205,7 +205,7 @@
                                             <a href="{{ route('product.shop', $latestProduct->slug) }}" class="product-img"><img class="card-img-top"
                                                     src="{{ asset('uploads/product/small/' . $productImage->image) }}"
                                                     alt=""></a>
-                                            <a class="whishlist" href="222"><i class="far fa-heart"></i></a>
+                                            <a class="whishlist" href="{{ route('wishlist.add', $latestProduct->id) }}"><i class="far fa-heart"></i></a>
 
                                             <div class="product-action">
                                                 <a class="btn btn-dark" href="javascript:void(0);" onclick="addToCart({{ $latestProduct->id }})">

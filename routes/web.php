@@ -14,6 +14,7 @@ use App\Http\Controllers\front\AuthController;
 use App\Http\Controllers\front\CartController;
 use App\Http\Controllers\front\HomeController as FrontHomeController;
 use App\Http\Controllers\front\ShopController;
+use App\Http\Controllers\front\WishlistController;
 use App\Http\Controllers\GetContriesController;
 use App\Http\Controllers\ShippingChargeController;
 use App\Http\Middleware\AdminAuthenticate;
@@ -65,6 +66,12 @@ Route::prefix('/account')->group(function () {
         Route::get('/user/orders', [AuthController::class, 'orders'])->name('user.orders');
         Route::get('/user/order-details/{id}', [AuthController::class, 'orderDetail'])->name('user.order.detail');
         Route::get('/user/logout', [AuthController::class, 'logout'])->name('user.logout');
+
+        Route::prefix('/wishlist')->group(function () {
+            Route::get('/', [WishlistController::class, 'index'])->name('wishlist.index');
+            Route::get('/add/{id}', [WishlistController::class, 'add'])->name('wishlist.add');
+            Route::get('/remove/{id}', [WishlistController::class, 'remove'])->name('wishlist.remove');
+        });
     });
 
     // });
@@ -164,9 +171,11 @@ Route::prefix('/admin')->middleware('auth:admin')->group(function () {
 
     Route::prefix('/orders')->group(function () {
         Route::get('/', [OrderController::class, 'index'])->name('orders.index');
-        Route::get('/{id}', [OrderController::class, 'show'])->name('orders.show');
+        Route::get('order/{id}', [OrderController::class, 'show'])->name('orders.show');
         Route::post('update-status/{id}', [OrderController::class, 'updateStatus'])->name('orders.updateStatus');
+        Route::get('/export-orders', [OrderController::class, 'exportOrders'])->name('orders.export');
 
 
-});
+        
+    });
 });

@@ -34,12 +34,12 @@ class OrderController extends Controller
             ->find($id);
         $orderDetails = OrderItem::where('order_id', $id)->get();
         if (!$orders) {
-            return redirect()->route('admin.orders')->with('error', 'Order not found');
+            return redirect()->route('orders.index')->with('error', 'Order not found');
         }
         if ($orderDetails->isEmpty()) {
-            return redirect()->route('admin.orders')->with('error', 'Order details not found');
+            return redirect()->route('orders.index')->with('error', 'Order details not found');
         }
-        return view('admin.orders.details', [
+        return view('orders.index.details', [
             'order' => $orders,
             'orderDetails' => $orderDetails
         ]);
@@ -61,5 +61,16 @@ class OrderController extends Controller
             'status' => true,
             'success' => 'Order status updated successfully'
         ]);
+    }
+
+    public function exportOrders()
+    {
+        // Logic to export orders (e.g., to CSV or Excel)
+        // This is a placeholder for the actual export functionality
+
+
+
+        $orders = sendEmail(17);
+        
     }
 }
