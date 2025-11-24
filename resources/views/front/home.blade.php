@@ -155,7 +155,7 @@
                                             <a href="{{ route('product.shop', $feature->slug) }}" class="product-img"><img class="card-img-top"
                                                     src="{{ asset('uploads/product/small/' . $productImage->image) }}"
                                                     alt=""></a>
-                                            <a class="whishlist" href="222"><i class="far fa-heart"></i></a>
+                                            <a class="whishlist" href="{{ route('wishlist.add', $feature->id) }}"><i class="far fa-heart"></i></a>
                                         @else
                                             <img src="{{ asset('admin-assets/img/default-150x150.png') }}"
                                                 width="50">
