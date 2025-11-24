@@ -172,7 +172,8 @@
                                     <div class="card product-card">
                                         <div class="product-image position-relative">
                                             @if ($productImage)
-                                                <a href="{{ route('product.shop', $product->slug) }}" class="product-img"><img class="card-img-top"
+                                                <a href="{{ route('product.shop', $product->slug) }}"
+                                                    class="product-img"><img class="card-img-top"
                                                         src="{{ asset('uploads/product/small/' . $productImage->image) }}"
                                                         alt=""></a>
                                                 <a class="whishlist" href="222"><i class="far fa-heart"></i></a>
@@ -182,9 +183,25 @@
                                             @endif
 
                                             <div class="product-action">
-                                                <a class="btn btn-dark" href="javascript:void(0);" onclick="addToCart({{ $product->id }})">
-                                                    <i class="fa fa-shopping-cart"></i> Add To Cart
-                                                </a>
+                                                @if ($product->track_qty == 'Yes')
+                                                    @if ($product->qty > 0)
+                                                        <a class="btn btn-dark" href="javascript:void(0);"
+                                                            onclick="addToCart({{ $product->id }})">
+                                                            <i class="fa fa-shopping-cart"></i> Add To Cart
+                                                        </a>
+                                                    @else
+                                                        <a class="btn btn-warning" href="javascript:void(0);"
+                                                            onclick="addToCart({{ $product->id }})">
+                                                            <i class="fa fa-shopping-cart"></i> Out of stock
+                                                        </a>
+                                                    @endif
+                                                @else
+                                                    <a class="btn btn-dark" href="javascript:void(0);"
+                                                        onclick="addToCart({{ $product->id }})">
+                                                        <i class="fa fa-shopping-cart"></i> Add To Cart
+                                                    </a>
+                                                @endif
+
                                             </div>
                                         </div>
                                         <div class="card-body text-center mt-3">
@@ -192,7 +209,8 @@
                                             <div class="price mt-2">
                                                 <span class="h5"><strong>{{ $product->price }}</strong></span>
                                                 @if ($product->compare_price > 0)
-                                                    <span class="h6 text-underline"><del>{{ $product->compare_price }}</del></span>
+                                                    <span
+                                                        class="h6 text-underline"><del>{{ $product->compare_price }}</del></span>
                                                 @endif
                                             </div>
                                         </div>

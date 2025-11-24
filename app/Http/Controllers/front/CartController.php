@@ -217,6 +217,12 @@ class CartController extends Controller
                 $orderItem->price = $item->price;
                 $orderItem->total = $item->price * $item->qty;
                 $orderItem->save();
+
+                $product = Product::find($item->id);
+                if($product->track_qty == 'Yes'){
+                    $product->qty = $product->qty - $item->qty;
+                    $product->save();
+                }
             }
 
             Cart::destroy();
@@ -310,7 +316,7 @@ class CartController extends Controller
         $subtotalString  = Cart::subtotal();
         $subtotal = floatval(str_replace(',', '', $subtotalString));
 
-        if($subtotal < $coupon->minimum_amount){
+        if ($subtotal < $coupon->minimum_amount) {
             return response()->json([
                 'status' => false,
                 'message' => 'Your order amount is less than the minimum order amount for this coupon.'
@@ -345,7 +351,7 @@ class CartController extends Controller
 
     public function removeCoupon(Request $request)
     {
-        if ($request->session()->has('discountCode')) {     
+        if ($request->session()->has('discountCode')) {
             $request->session()->forget('discountCode');
             $request->session()->forget('newSubtotal');
             $request->session()->forget('newDiscount');
