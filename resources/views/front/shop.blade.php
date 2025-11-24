@@ -217,6 +217,9 @@
                                     </div>
                                 </div>
                             @endforeach
+                            @else
+                            <div class="col-md-12">
+                                <h4 class="text-center">No Products Found</h4>
                         @endif
 
                         <div class="col-md-12 pt-5">
