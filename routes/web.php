@@ -66,6 +66,8 @@ Route::prefix('/account')->group(function () {
         Route::get('/user/orders', [AuthController::class, 'orders'])->name('user.orders');
         Route::get('/user/order-details/{id}', [AuthController::class, 'orderDetail'])->name('user.order.detail');
         Route::get('/user/logout', [AuthController::class, 'logout'])->name('user.logout');
+        Route::post('/account/update', [AuthController::class, 'update'])->name('account.update');
+
 
         Route::prefix('/wishlist')->group(function () {
             Route::get('/', [WishlistController::class, 'index'])->name('wishlist.index');
@@ -176,6 +178,6 @@ Route::prefix('/admin')->middleware('auth:admin')->group(function () {
         Route::get('/export-orders', [OrderController::class, 'exportOrders'])->name('orders.export');
 
 
-        
+
     });
 });

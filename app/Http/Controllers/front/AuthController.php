@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\front;
 
 use App\Http\Controllers\Controller;
+use App\Models\CustomerAddress;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\Product;
@@ -75,7 +76,9 @@ class AuthController extends Controller
 
     public function account()
     {
-        return view('front.account');
+        $user = Auth::user();
+        $userDatails = CustomerAddress::where('user_id', $user->id)->first();
+        return view('front.account', compact('userDatails'));
     }
     public function logout()
     {
@@ -108,5 +111,42 @@ class AuthController extends Controller
         ]);
     }
 
-    
+
+
+
+    public function update(Request $request)
+    {
+        // Validation using Validator Facade
+        $validator = Validator::make($request->all(), [
+            'name'    => 'required|string|max:255',
+            'email'   => 'required|email',
+            'phone'   => 'nullable|string|max:20',
+            'address' => 'nullable|string|max:500',
+        ]);
+
+        // Agar validation fail ho jaye
+        if ($validator->fails()) {
+            return back()
+                ->withErrors($validator)
+                ->withInput();
+        }
+
+        // Current logged user
+        $user = Auth::user();
+
+        // Update user data
+
+        User::where('id', $user->id)->update([
+            'name'    => $request->name,
+            'email'   => $request->email,
+            'phone'   => $request->phone,
+        ]);
+
+        CustomerAddress::where('user_id', $user->id)->update([
+            'address' => $request->address,
+        ]);
+        
+
+        return back()->with('success', 'Account details updated successfully!');
+    }
 }
