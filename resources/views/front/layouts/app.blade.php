@@ -62,7 +62,7 @@
                     </a>
                 </div>
                 <div class="col-lg-6 col-6 text-left  d-flex justify-content-end align-items-center">
-                    <a href="account.php" class="nav-link text-dark">My Account</a>
+                    <a href="{{ route('user.account') }}" class="nav-link text-dark">My Account</a>
                     <form action="{{ route('shop') }}" method="GET">
                         <div class="input-group">
                             <input type="text" value="{{ request()->product_search }}"

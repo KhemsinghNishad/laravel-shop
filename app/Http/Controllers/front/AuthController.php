@@ -145,8 +145,40 @@ class AuthController extends Controller
         CustomerAddress::where('user_id', $user->id)->update([
             'address' => $request->address,
         ]);
-        
+
 
         return back()->with('success', 'Account details updated successfully!');
     }
+
+    public function changePassword()
+    {
+        return view('front.change-password');
+    }
+
+    public function updatePassword(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'old_password' => 'required',
+            'password' => 'required|min:6|confirmed',
+        ]);
+
+        if ($validator->fails()) {
+            return back()
+                ->withErrors($validator)
+                ->withInput();
+        }
+
+        $user = Auth::user();
+
+        if (!Hash::check($request->old_password, $user->password)) {
+            return back()->with('error', 'Old password is incorrect');
+        }
+
+        $user->password = Hash::make($request->password);
+        $user->save();
+
+        return redirect()->route('home')->with('success', 'Password updated successfully!');
+    }
 }
+
+

@@ -70,6 +70,9 @@ Route::prefix('/account')->group(function () {
         Route::get('/user/logout', [AuthController::class, 'logout'])->name('user.logout');
         Route::post('/account/update', [AuthController::class, 'update'])->name('account.update');
 
+        Route::get('account/change-password', [AuthController::class, 'changePassword'])->name('user.change-password');
+
+        Route::post('account/update-password', [AuthController::class, 'updatePassword'])->name('user.update-password');
 
         Route::prefix('/wishlist')->group(function () {
             Route::get('/', [WishlistController::class, 'index'])->name('wishlist.index');
@@ -99,6 +102,9 @@ Route::prefix('/admin')->middleware('auth:admin')->group(function () {
     Route::get('/dashboard', [HomeController::class, 'index'])->name('admin.dashboard');
     Route::get('/logout', [HomeController::class, 'logout'])->name('admin.logout');
 
+
+    Route::get('/change-password', [HomeController::class, 'changePassword'])->name('admin.change-password');
+    Route::post('/update-password', [HomeController::class, 'updatePassword'])->name('admin.update-password');
 
     //  Categories Route
     Route::get('/categories', [CategoriesController::class, 'index'])->name('categories.list');
@@ -178,9 +184,6 @@ Route::prefix('/admin')->middleware('auth:admin')->group(function () {
         Route::get('order/{id}', [OrderController::class, 'show'])->name('orders.show');
         Route::post('update-status/{id}', [OrderController::class, 'updateStatus'])->name('orders.updateStatus');
         Route::get('/export-orders', [OrderController::class, 'exportOrders'])->name('orders.export');
-
-
-
     });
 
     Route::prefix('/user')->group(function () {
@@ -198,5 +201,5 @@ Route::prefix('/admin')->middleware('auth:admin')->group(function () {
         Route::get('/edit/{id}', [DynamicPagesController::class, 'edit'])->name('dynamic-pages.edit');
         Route::put('/{id}', [DynamicPagesController::class, 'update'])->name('dynamic-pages.update');
         Route::delete('/destroy/{id}', [DynamicPagesController::class, 'destroy'])->name('dynamic-pages.destroy');
-});
+    });
 });
