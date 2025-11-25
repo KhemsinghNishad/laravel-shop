@@ -65,7 +65,8 @@
                     <a href="account.php" class="nav-link text-dark">My Account</a>
                     <form action="{{ route('shop') }}" method="GET">
                         <div class="input-group">
-                            <input type="text" value="{{ request()->product_search }}" placeholder="Search For Products" name="product_search" class="form-control"
+                            <input type="text" value="{{ request()->product_search }}"
+                                placeholder="Search For Products" name="product_search" class="form-control"
                                 aria-label="Amount (to the nearest dollar)">
                             <span class="input-group-text">
                                 <button type="submit" class="btn btn-primary">
@@ -197,11 +198,34 @@
                     <div class="footer-card">
                         <h3>Important Links</h3>
                         <ul>
-                            <li><a href="about-us.php" title="About">About</a></li>
-                            <li><a href="contact-us.php" title="Contact Us">Contact Us</a></li>
-                            <li><a href="#" title="Privacy">Privacy</a></li>
-                            <li><a href="#" title="Privacy">Terms & Conditions</a></li>
-                            <li><a href="#" title="Privacy">Refund Policy</a></li>
+                            @php
+                                use Illuminate\Support\Str;
+                            @endphp
+
+                            <li>
+                                <a href="{{ route('dynamic.page', Str::slug('About')) }}" title="About">About</a>
+                            </li>
+
+                            <li>
+                                <a href="{{ route('dynamic.page', Str::slug('Contact Us')) }}"
+                                    title="Contact Us">Contact Us</a>
+                            </li>
+
+                            <li>
+                                <a href="{{ route('dynamic.page', Str::slug('Privacy')) }}"
+                                    title="Privacy">Privacy</a>
+                            </li>
+
+                            <li>
+                                <a href="{{ route('dynamic.page', Str::slug('Terms & Conditions')) }}"
+                                    title="Terms & Conditions">Terms & Conditions</a>
+                            </li>
+
+                            <li>
+                                <a href="{{ route('dynamic.page', Str::slug('Refund Policy')) }}"
+                                    title="Refund Policy">Refund Policy</a>
+                            </li>
+
                         </ul>
                     </div>
                 </div>
@@ -210,9 +234,9 @@
                     <div class="footer-card">
                         <h3>My Account</h3>
                         <ul>
-                            <li><a href="#" title="Sell">Login</a></li>
-                            <li><a href="#" title="Advertise">Register</a></li>
-                            <li><a href="#" title="Contact Us">My Orders</a></li>
+                            <li><a href="{{ route('user.login') }}" title="Sell">Login</a></li>
+                            <li><a href="{{ route('user.register') }}" title="Advertise">Register</a></li>
+                            <li><a href="{{ route('user.orders') }}" title="Contact Us">My Orders</a></li>
                         </ul>
                     </div>
                 </div>
@@ -259,22 +283,23 @@
                 navbar.classList.remove("sticky");
             }
         }
-        function addToCart(id){
+
+        function addToCart(id) {
             $.ajax({
                 url: '{{ route('front.addToCart') }}',
                 type: 'post',
-                data: {id: id},
+                data: {
+                    id: id
+                },
                 dataType: 'json',
-                success: function(response){
-                    if(response.status == true){
+                success: function(response) {
+                    if (response.status == true) {
                         window.location.href = '{{ route('front.cart') }}';
-                    }
-
-                    else{
+                    } else {
                         alert(response.message);
                     }
                 },
-                error: function(jqXHR, exception){
+                error: function(jqXHR, exception) {
                     console.log(jqXHR.responseText);
                 }
             });

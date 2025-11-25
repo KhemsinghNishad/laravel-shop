@@ -3,6 +3,7 @@
 use App\Http\Controllers\admin\AdminLoginController;
 use App\Http\Controllers\admin\BrandsController;
 use App\Http\Controllers\admin\CategoriesController;
+use App\Http\Controllers\admin\DynamicPagesController;
 use App\Http\Controllers\admin\HomeController;
 use App\Http\Controllers\admin\ImageUploadController;
 use App\Http\Controllers\admin\OrderController;
@@ -49,7 +50,7 @@ Route::get('/front/say-hello/{user_name}/{orderId}', [CartController::class, 'he
 Route::post('/front/apply-coupon', [CartController::class, 'applyCoupon'])->name('apply.coupon');
 Route::post('/front/remove.coupon', [CartController::class, 'removeCoupon'])->name('remove.coupon');
 
-
+Route::get('/dynamic-page/{slug}', [FrontHomeController::class, 'dynamicPage'])->name('dynamic.page');
 
 Route::prefix('/account')->group(function () {
     // Route::middleware('guest')->group(function () {
@@ -189,4 +190,13 @@ Route::prefix('/admin')->middleware('auth:admin')->group(function () {
         Route::get('/users/{id}/edit', [UserController::class, 'edit'])->name('user.edit');
         Route::delete('/users/{id}', [UserController::class, 'destroy'])->name('user.delete');
     });
+
+    Route::prefix('/dynamic-pages')->group(function () {
+        Route::get('/', [DynamicPagesController::class, 'index'])->name('dynamic-pages.index');
+        Route::get('/create', [DynamicPagesController::class, 'create'])->name('dynamic-pages.create');
+        Route::post('/store', [DynamicPagesController::class, 'store'])->name('dynamic-pages.store');
+        Route::get('/edit/{id}', [DynamicPagesController::class, 'edit'])->name('dynamic-pages.edit');
+        Route::put('/{id}', [DynamicPagesController::class, 'update'])->name('dynamic-pages.update');
+        Route::delete('/destroy/{id}', [DynamicPagesController::class, 'destroy'])->name('dynamic-pages.destroy');
+});
 });
