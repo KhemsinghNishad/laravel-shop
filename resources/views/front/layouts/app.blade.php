@@ -188,7 +188,7 @@
                     <div class="footer-card">
                         <h3>Get In Touch</h3>
                         <p>No dolore ipsum accusam no lorem. <br>
-                            123 Street, New York, USA <br>
+                            123 Street, Chhattisgarh, INDIA <br>
                             exampl@example.com <br>
                             000 000 0000</p>
                     </div>
@@ -247,7 +247,7 @@
                 <div class="row">
                     <div class="col-12 mt-3">
                         <div class="copy-right text-center">
-                            <p>© Copyright 2022 Amazing Shop. All Rights Reserved</p>
+                            <p>© Copyright 2025 Amazing Shop. All Rights Reserved</p>
                         </div>
                     </div>
                 </div>
