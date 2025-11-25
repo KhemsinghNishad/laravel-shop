@@ -17,6 +17,7 @@ use App\Http\Controllers\front\ShopController;
 use App\Http\Controllers\front\WishlistController;
 use App\Http\Controllers\GetContriesController;
 use App\Http\Controllers\ShippingChargeController;
+use App\Http\Controllers\user\UserController;
 use App\Http\Middleware\AdminAuthenticate;
 use App\Http\Middleware\AdminRedirect;
 use App\Http\Middleware\UserAuthenticate;
@@ -179,5 +180,13 @@ Route::prefix('/admin')->middleware('auth:admin')->group(function () {
 
 
 
+    });
+
+    Route::prefix('/user')->group(function () {
+        Route::get('/', [UserController::class, 'index'])->name('user.list');
+        Route::get('/create', [UserController::class, 'create'])->name('user.create');
+        Route::post('/user/store', [UserController::class, 'store'])->name('user.store');
+        Route::get('/users/{id}/edit', [UserController::class, 'edit'])->name('user.edit');
+        Route::delete('/users/{id}', [UserController::class, 'destroy'])->name('user.delete');
     });
 });
