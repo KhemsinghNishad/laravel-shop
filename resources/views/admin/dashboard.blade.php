@@ -1,69 +1,136 @@
 @extends('admin.layouts.app')
 @section('content')
     <div class="content-wrapper">
-            <!-- Content Header (Page header) -->
-            <section class="content-header">
-                <div class="container-fluid">
-                    <div class="row mb-2">
-                        <div class="col-sm-6">
-                            <h1>Dashboard</h1>
-                        </div>
-                        <div class="col-sm-6">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1>Dashboard</h1>
+                    </div>
+                    <div class="col-sm-6">
 
+                    </div>
+                </div>
+            </div>
+            <!-- /.container-fluid -->
+        </section>
+        <!-- Main content -->
+        <section class="content">
+            <!-- Default box -->
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-4 col-6">
+                        <div class="small-box card">
+                            <div class="inner">
+                                <h3>{{ $ordersCount }}</h3>
+                                <p>Total Orders</p>
+                            </div>
+                            <div class="icon">
+                                <i class="ion ion-bag"></i>
+                            </div>
+                            <a href="#" class="small-box-footer text-dark">More info <i
+                                    class="fas fa-arrow-circle-right"></i></a>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4 col-6">
+                        <div class="small-box card">
+                            <div class="inner">
+                                <h3>{{ $usersCount }}</h3>
+                                <p>Total Customers</p>
+                            </div>
+                            <div class="icon">
+                                <i class="ion ion-stats-bars"></i>
+                            </div>
+                            <a href="#" class="small-box-footer text-dark">More info <i
+                                    class="fas fa-arrow-circle-right"></i></a>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-6">
+                        <div class="small-box card">
+                            <div class="inner">
+                                <h3>{{ $productsCount }}</h3>
+                                <p>Total Products</p>
+                            </div>
+                            <div class="icon">
+                                <i class="ion ion-stats-bars"></i>
+                            </div>
+                            <a href="#" class="small-box-footer text-dark">More info <i
+                                    class="fas fa-arrow-circle-right"></i></a>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-6">
+                        <div class="small-box card">
+                            <div class="inner">
+                                <h3>${{ $currentMonthRevenue }}</h3>
+                                <p>Revenue this month</p>
+                            </div>
+                            <div class="icon">
+                                <i class="ion ion-stats-bars"></i>
+                            </div>
+                            <a href="#" class="small-box-footer text-dark">More info <i
+                                    class="fas fa-arrow-circle-right"></i></a>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-6">
+                        <div class="small-box card">
+                            <div class="inner">
+                                <h3>${{ $lastMonthRevenue }}</h3>
+                                <p>Revenue last month</p>
+                            </div>
+                            <div class="icon">
+                                <i class="ion ion-stats-bars"></i>
+                            </div>
+                            <a href="#" class="small-box-footer text-dark">More info <i
+                                    class="fas fa-arrow-circle-right"></i></a>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-6">
+                        <div class="small-box card">
+                            <div class="inner">
+                                <h3>${{ $last30DaysRevenue }}</h3>
+                                <p>Revenue last 30 days</p>
+                            </div>
+                            <div class="icon">
+                                <i class="ion ion-stats-bars"></i>
+                            </div>
+                            <a href="#" class="small-box-footer text-dark">More info <i
+                                    class="fas fa-arrow-circle-right"></i></a>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-6">
+                        <div class="small-box card">
+                            <div class="inner">
+                                @foreach ($monthWiseRevenue as $row)
+                                    <p>Month: {{ $row->month }} — Revenue: ₹{{ number_format($row->revenue, 2) }}</p>
+                                @endforeach
+
+                            </div>
+                            <div class="icon">
+                                <i class="ion ion-stats-bars"></i>
+                            </div>
+                            <a href="#" class="small-box-footer text-dark">More info <i
+                                    class="fas fa-arrow-circle-right"></i></a>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4 col-6">
+                        <div class="small-box card">
+                            <div class="inner">
+                                <h3>${{ $totalRevenue }}</h3>
+                                <p>Total Revenue</p>
+                            </div>
+                            <div class="icon">
+                                <i class="ion ion-person-add"></i>
+                            </div>
+                            <a href="javascript:void(0);" class="small-box-footer">&nbsp;</a>
                         </div>
                     </div>
                 </div>
-                <!-- /.container-fluid -->
-            </section>
-            <!-- Main content -->
-            <section class="content">
-                <!-- Default box -->
-                <div class="container-fluid">
-                    <div class="row">
-                        <div class="col-lg-4 col-6">
-                            <div class="small-box card">
-                                <div class="inner">
-                                    <h3>150</h3>
-                                    <p>Total Orders</p>
-                                </div>
-                                <div class="icon">
-                                    <i class="ion ion-bag"></i>
-                                </div>
-                                <a href="#" class="small-box-footer text-dark">More info <i
-                                        class="fas fa-arrow-circle-right"></i></a>
-                            </div>
-                        </div>
-
-                        <div class="col-lg-4 col-6">
-                            <div class="small-box card">
-                                <div class="inner">
-                                    <h3>50</h3>
-                                    <p>Total Customers</p>
-                                </div>
-                                <div class="icon">
-                                    <i class="ion ion-stats-bars"></i>
-                                </div>
-                                <a href="#" class="small-box-footer text-dark">More info <i
-                                        class="fas fa-arrow-circle-right"></i></a>
-                            </div>
-                        </div>
-
-                        <div class="col-lg-4 col-6">
-                            <div class="small-box card">
-                                <div class="inner">
-                                    <h3>$1000</h3>
-                                    <p>Total Sale</p>
-                                </div>
-                                <div class="icon">
-                                    <i class="ion ion-person-add"></i>
-                                </div>
-                                <a href="javascript:void(0);" class="small-box-footer">&nbsp;</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- /.card -->
-            </section>
-            <!-- /.content -->
-        </div>
+            </div>
+            <!-- /.card -->
+        </section>
+        <!-- /.content -->
+    </div>
 @endsection
