@@ -59,6 +59,11 @@ Route::prefix('/account')->group(function () {
         Route::post('/user/process-register', [AuthController::class, 'processRegister'])->name('user.process-register');
         Route::get('/user/login', [AuthController::class, 'login'])->name('user.login');
         Route::post('/user/authenticate', [AuthController::class, 'authenticate'])->name('user.authenticate');
+        Route::get('/user/forgot-password', [AuthController::class, 'forgotPassword'])->name('user.forgot-password');
+        Route::post('/user/forgot-password-email', [AuthController::class, 'forgotPasswordEmail'])->name('user.forgot-password-email');
+        Route::get('/user/forgot-password-form/{token}', [AuthController::class, 'forgotPasswordForm'])->name('user.reset-password-form');
+        Route::post('/user/forgot-password-form', [AuthController::class, 'resetPasswordForm'])->name('user.reset-password');
+        
     });
 
     // });
