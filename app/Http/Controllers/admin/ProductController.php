@@ -7,6 +7,7 @@ use App\Models\Brands;
 use App\Models\Category;
 use App\Models\Product;
 use App\Models\Product_Image;
+use App\Models\ProductRating;
 use App\Models\TempImage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
@@ -137,8 +138,8 @@ class ProductController extends Controller
         $product = Product::find($id);
         $data = [];
         $relatedProducts = [];
-        if(!empty($product->related_products)){
-            $productArray= explode(',', $product->related_products);
+        if (!empty($product->related_products)) {
+            $productArray = explode(',', $product->related_products);
             $relatedProducts = Product::whereIn('id', $productArray)->get();
         }
         if ($product) {
@@ -252,9 +253,45 @@ class ProductController extends Controller
             }
         }
 
-       return response()->json([
+        return response()->json([
             'tags' => $tempProduct,
             'status' => true
-       ]);
+        ]);
     }
+
+    public function ratingList(Request $request)
+    {
+        $query = ProductRating::with('product')->latest('id');
+
+        if ($request->table_search) {
+            $query->where('name', 'like', "%{$request->table_search}%")
+                ->orWhere('email', 'like', "%{$request->table_search}%")
+                ->orWhere('review', 'like', "%{$request->table_search}%");
+        }
+
+        $ratings = $query->paginate(10);
+
+        return view('admin.rating.approval', compact('ratings'));
+    }
+
+    public function approveRating(Request $request, $status)
+    {
+        $ratingId = $request->rating_id;                
+        $rating = ProductRating::find($ratingId);
+        if ($rating) {
+            $rating->status = $status;
+            $rating->save();
+            $request->session()->flash('success', 'Rating status updated successfully.');
+            return response()->json([
+                'status' => true,
+                'message' => 'Rating status updated successfully.'
+            ]);
+        } else {
+            $request->session()->flash('error', 'Rating not found.');
+            return response()->json([
+                'status' => false,
+                'message' => 'Rating not found.'
+            ]);
+        }
+    }   
 }

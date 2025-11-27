@@ -10,6 +10,7 @@
                     </div>
                     <div class="col-sm-6 text-right">
                         <a href="{{ route('product.create') }}" class="btn btn-primary">New Product</a>
+                        <a href="{{ route('rating.list') }}" class="btn btn-warning">Approve Ratings</a>
                     </div>
                 </div>
             </div>

@@ -38,6 +38,8 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('front-assets/css/slick-theme.css') }}" />
     {{-- <link rel="stylesheet" type="text/css" href="{{ asset('front-assets/css/video-js.css') }}" /> --}}
     <link rel="stylesheet" type="text/css" href="{{ asset('front-assets/css/style.css') }}" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+
 
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -56,13 +58,14 @@
         <div class="container">
             <div class="row align-items-center py-3 d-none d-lg-flex justify-content-between">
                 <div class="col-lg-4 logo">
-                    <a href="index.php" class="text-decoration-none">
+                    <a href="{{ route('home') }}" class="text-decoration-none">
                         <span class="h1 text-uppercase text-primary bg-dark px-2">Online</span>
                         <span class="h1 text-uppercase text-dark bg-primary px-2 ml-n1">SHOP</span>
                     </a>
                 </div>
                 <div class="col-lg-6 col-6 text-left  d-flex justify-content-end align-items-center">
                     <a href="{{ route('user.account') }}" class="nav-link text-dark">My Account</a>
+                    <a href="{{ route('home') }}" class="nav-link text-dark">Home</a>
                     <form action="{{ route('shop') }}" method="GET">
                         <div class="input-group">
                             <input type="text" value="{{ request()->product_search }}"
@@ -237,6 +240,7 @@
                             <li><a href="{{ route('user.login') }}" title="Sell">Login</a></li>
                             <li><a href="{{ route('user.register') }}" title="Advertise">Register</a></li>
                             <li><a href="{{ route('user.orders') }}" title="Contact Us">My Orders</a></li>
+                            <li><a href="{{ route('admin.dashboard') }}" class="Admin">Admin</a></li>
                         </ul>
                     </div>
                 </div>

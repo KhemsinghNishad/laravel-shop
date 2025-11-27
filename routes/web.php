@@ -48,7 +48,8 @@ Route::get('/front/checkout-cart', [CartController::class, 'checkout'])->name('c
 Route::post('/front/checkout-process', [CartController::class, 'checkoutProcess'])->name('checkout.process');
 Route::get('/front/say-hello/{user_name}/{orderId}', [CartController::class, 'hello'])->name('hello');
 Route::post('/front/apply-coupon', [CartController::class, 'applyCoupon'])->name('apply.coupon');
-Route::post('/front/remove.coupon', [CartController::class, 'removeCoupon'])->name('remove.coupon');
+
+Route::post('/front/rating', [ShopController::class, 'store'])->name('rate.product');
 
 Route::get('/dynamic-page/{slug}', [FrontHomeController::class, 'dynamicPage'])->name('dynamic.page');
 
@@ -166,6 +167,8 @@ Route::prefix('/admin')->middleware('auth:admin')->group(function () {
     Route::put('/product/{id}', [ProductController::class, 'update'])->name('product.update');
     Route::delete('/product/{id}', [ProductController::class, 'destroy'])->name('product.destroy');
     Route::get('/get-product', [ProductController::class, 'getProduct'])->name('product.get-product');
+    Route::get('/rating/approval', [ProductController::class, 'ratingList'])->name('rating.list');
+    Route::put('/rating/approve/{status}', [ProductController::class, 'approveRating'])->name('rating.approve');
 
     Route::post('/product-image/update', [ProductImageController::class, 'update'])->name('product.image.update');
     Route::delete('/product-image', [ProductImageController::class, 'destroy'])->name('product.image.delete');
