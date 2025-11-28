@@ -1,6 +1,6 @@
 FROM php:8.2-apache
 
-# Enable Apache modules
+# Enable Apache mod_rewrite
 RUN a2enmod rewrite
 
 # Install system dependencies
@@ -11,21 +11,21 @@ RUN apt-get update && apt-get install -y \
 # Install Composer
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
-# Copy project files
+# Copy everything to /var/www/html
 COPY . /var/www/html
 
 WORKDIR /var/www/html
 
-# Give storage permission
+# Storage & Cache permissions
 RUN chmod -R 777 storage bootstrap/cache
 
 # Install Laravel dependencies
 RUN composer install --no-interaction --no-dev --optimize-autoloader
 
-# Apache Document Root = public
+# Set Apache Document Root to public folder
 ENV APACHE_DOCUMENT_ROOT=/var/www/html/public
 
-# Update Apache config for public folder
+# Update Apache config to use /public
 RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' \
     /etc/apache2/sites-available/000-default.conf
 

@@ -4,3 +4,6 @@ services:
     env: docker
     plan: free
     autoDeploy: false
+    dockerfilePath: ./Dockerfile
+    startCommand: "apache2-foreground"
+    healthCheckPath: /
