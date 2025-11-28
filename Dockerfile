@@ -22,6 +22,9 @@ RUN chmod -R 777 storage bootstrap/cache
 # Install Laravel dependencies
 RUN composer install --no-interaction --no-dev --optimize-autoloader
 
+# Create storage link automatically (IMPORTANT FIX)
+RUN php artisan storage:link || true
+
 # Set Apache Document Root to public folder
 ENV APACHE_DOCUMENT_ROOT=/var/www/html/public
 
