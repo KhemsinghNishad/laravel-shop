@@ -1,33 +1,35 @@
-# Base PHP image (FPM for Laravel)
-FROM php:8.2-fpm
+# Use official PHP image with Apache
+FROM php:8.2-apache
 
-# Install system dependencies and PHP extensions required for Laravel + PostgreSQL
+# Enable Apache mod_rewrite
+RUN a2enmod rewrite
+
+# Install system dependencies
 RUN apt-get update && apt-get install -y \
-    git unzip libzip-dev libpq-dev libicu-dev \
-    libpng-dev libjpeg62-turbo-dev libfreetype6-dev \
-    && docker-php-ext-configure gd --with-freetype --with-jpeg \
-    && docker-php-ext-install pdo pdo_pgsql zip intl gd \
-    && rm -rf /var/lib/apt/lists/*
+    zip unzip git curl libzip-dev libpng-dev libonig-dev libxml2-dev \
+    && docker-php-ext-install pdo pdo_mysql zip gd
 
-# Install Composer from official Composer image
-COPY --from=composer:2.7 /usr/bin/composer /usr/bin/composer
+# Install Composer
+COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
-# Set working directory inside the container
+# Copy project files
+COPY . /var/www/html
+
+# Set working directory
 WORKDIR /var/www/html
 
-# Copy Laravel project files into container
-COPY . .
+# Give storage permission
+RUN chmod -R 777 storage bootstrap/cache
 
-# Install PHP dependencies
+# Install Laravel dependencies
 RUN composer install --no-dev --optimize-autoloader
 
-# Set permissions for Laravel storage and bootstrap cache folders
-RUN chown -R www-data:www-data /var/www/html \
-    && chmod -R 755 /var/www/html/storage \
-    && chmod -R 755 /var/www/html/bootstrap/cache
+# Apache Document Root → public folder
+ENV APACHE_DOCUMENT_ROOT=/var/www/html/public
 
-# Expose Render’s HTTP port
-EXPOSE 10000
+RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' \
+    /etc/apache2/sites-available/000-default.conf
 
-# Start Laravel built-in server
-CMD php artisan serve --host=0.0.0.0 --port=10000
+EXPOSE 80
+
+CMD ["apache2-foreground"]

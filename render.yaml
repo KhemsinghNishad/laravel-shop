@@ -1,0 +1,9 @@
+services:
+  - type: web
+    name: laravel-shop
+    env: docker
+    plan: free
+    disk:
+      name: storage
+      mountPath: /var/www/html/storage
+      sizeGB: 1
