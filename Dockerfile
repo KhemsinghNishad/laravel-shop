@@ -5,33 +5,32 @@ RUN a2enmod rewrite
 
 # Install system dependencies
 RUN apt-get update && apt-get install -y \
-    zip unzip git curl libzip-dev libpng-dev libonig-dev libxml2-dev \
-    && docker-php-ext-install pdo pdo_mysql zip gd
+    zip unzip git curl libzip-dev libpng-dev libonig-dev libxml2-dev libpq-dev \
+    && docker-php-ext-install pdo pdo_mysql pdo_pgsql pgsql zip gd
 
 # Install Composer
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
-# Copy everything to /var/www/html
+# Copy project files
 COPY . /var/www/html
 
 WORKDIR /var/www/html
 
-# Storage & Cache permissions
+# Permissions
 RUN chmod -R 777 storage bootstrap/cache
 
 # Install Laravel dependencies
 RUN composer install --no-interaction --no-dev --optimize-autoloader
 
-# Create storage link automatically (IMPORTANT FIX)
+# Create storage link
 RUN php artisan storage:link || true
 
-# Set Apache Document Root to public folder
+# Apache Document Root
 ENV APACHE_DOCUMENT_ROOT=/var/www/html/public
 
-# Update Apache config to use /public
+# Update Apache config
 RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' \
     /etc/apache2/sites-available/000-default.conf
-
 RUN sed -ri -e 's!/var/www/!${APACHE_DOCUMENT_ROOT}!g' \
     /etc/apache2/apache2.conf
 
